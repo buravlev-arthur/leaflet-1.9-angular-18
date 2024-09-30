@@ -5,7 +5,6 @@ import {
   AfterViewInit,
   EventEmitter,
 } from '@angular/core';
-import * as leaflet from 'leaflet';
 import 'leaflet.markercluster';
 import type {
   Map,
@@ -36,6 +35,7 @@ export class MapComponent implements AfterViewInit {
   @Output() onMapClick = new EventEmitter<LeafletMouseEvent>();
   @Output() onMarkerClick = new EventEmitter<LeafletMouseEvent>();
 
+  private leaflet = window.L;
   private map: Map | null = null;
   private markers: MarkerClusterGroup | null = null;
   private clusterOptions: MarkerClusterGroupOptions = {
@@ -53,9 +53,10 @@ export class MapComponent implements AfterViewInit {
   }
 
   initMap(): void {
-    this.map = leaflet.map('map');
+    console.log('L: ', window.L);
+    this.map = this.leaflet.map('map');
     this.map.setView(this.coords, this.zoom);
-    leaflet
+    this.leaflet
       .tileLayer(this.tilesetUrl, {
         minZoom: this.minZoom,
         maxZoom: this.maxZoom,
@@ -68,10 +69,10 @@ export class MapComponent implements AfterViewInit {
       return;
     }
 
-    this.markers = leaflet.markerClusterGroup(this.clusterOptions);
+    this.markers = this.leaflet.markerClusterGroup(this.clusterOptions);
 
     this.data.forEach(({ coords, content }) => {
-      const marker: CircleMarker = leaflet
+      const marker: CircleMarker = this.leaflet
         .circleMarker(coords, {
           radius: 12,
           weight: 1,
