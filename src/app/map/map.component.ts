@@ -53,7 +53,6 @@ export class MapComponent implements AfterViewInit {
   }
 
   initMap(): void {
-    console.log('L: ', window.L);
     this.map = this.leaflet.map('map');
     this.map.setView(this.coords, this.zoom);
     this.leaflet
